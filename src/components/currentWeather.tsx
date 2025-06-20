@@ -1,14 +1,28 @@
 import type { WeatherData } from '../types/weatherData';
 import { selectHumidityIcon, selectWindIcon, selectWeatherIcon } from '../utils/selectIcon';
 import { dayOrNight } from '../utils/dayOrNight';
+import sunriseIcon from '../assets/icons/web/sunrise.png'
+import sunsetIcon from '../assets/icons/web/sunset.png'
+import feelsLikeIcon from '../assets/icons/web/feels.svg'
 
 export const CurrentWeather = ({ weather } : { weather:WeatherData }) => {
     return (
-    <div className="bg-gray-200 p-6 rounded-lg shadow-md max-w-sm">
-      <h2 className="text-2xl font-bold mb-2">{weather.name}</h2>
-      <p>Temperature: {weather.main.temp} °C <img src={selectWeatherIcon(weather.weather[0].id,dayOrNight(weather.sys.sunrise, weather.sys.sunset, weather.dt),weather.main.temp)} alt="" className='w-32'/></p>
-      <p>Weather: {weather.weather[0].main}</p>
-      <p>Humidity: {weather.main.humidity}% <img src={selectHumidityIcon(weather.main.humidity)} alt="" className='w-10'/></p>
-      <p>Wind Speed: {weather.wind.speed} m/s <img src={selectWindIcon(weather.wind.speed)} alt="" className='w-10'/></p>
-    </div>)
-}
+      <section className="flex bg-weather p-6 rounded-lg shadow-md w-full border-2 border-nav mt-4">
+        <div className='w-[50%] flex flex-wrap'>
+          <h2 className="text-2xl font-bold mb-0 w-full">Current Weather</h2>
+          <p className='w-full text-xl opacity-70'>{weather.weather[0].main}</p>
+          <div className='flex items-center mb-4 mt-4'>
+            <img className="w-25 ml-4" src={selectWeatherIcon(weather.weather[0].id,dayOrNight(weather.sys.sunrise, weather.sys.sunset, weather.dt),weather.main.temp)} alt=""/>
+            <p className='text-5xl ml-3 font-bold'>{weather.main.temp.toFixed(0)}°C</p>
+          </div>
+          <p className='flex w-full items-center mb-0.5 ml-2'><img src={selectHumidityIcon(weather.main.humidity)} alt="" className='w-8 mr-2'/>Humidity: {weather.main.humidity}%</p>
+          <p className='flex w-full items-center mb-0.5 ml-2'><img src={selectWindIcon(weather.wind.speed)} alt="" className='w-8 mr-2'/>Wind Speed: {weather.wind.speed} m/s</p>
+          <p className='flex w-full items-center mb-0.5 ml-2'><img src={feelsLikeIcon} alt="" className='h-8 w-8 mr-2'/>Feels like: {weather.main.feels_like.toFixed(0)}°C </p>
+          <p className='flex w-full items-center mb-0.5 ml-2'><img src={sunriseIcon} alt="" className='w-8 mr-2'/>Sunrise: TODO </p>
+          <p className='flex w-full items-center ml-2'><img src={sunsetIcon} alt="" className='w-8 mr-2'/>Sunset:  TODO</p>
+        </div>
+        <div className='w-[50%]'>
+          
+        </div>
+      </section>
+)}

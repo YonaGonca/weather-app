@@ -1,5 +1,5 @@
 export function currentTime(timezone:number): string {
-    const time = new Date(new Date().getTime() + timezone);
+    const time = new Date(new Date().getTime() + new Date().getTimezoneOffset()*60000 + timezone*1000);
 
     const options: Intl.DateTimeFormatOptions = {
         hour: 'numeric',
@@ -7,11 +7,11 @@ export function currentTime(timezone:number): string {
         hour12: true,
     }
 
-    return time.toLocaleString('en-US', options);
+    return time.toLocaleString('en-US', options);;
 }
 
 export function currentDate(timezone:number): string {
-    const date = new Date(new Date().getTime() + timezone);
+    const date = new Date(new Date().getTime() + new Date().getTimezoneOffset()*60000 + timezone*1000);
 
     const options: Intl.DateTimeFormatOptions = {
         weekday: 'long',
