@@ -151,7 +151,7 @@ export const selectWindIcon = (windSpeed: number): string => {
 export const selectWeatherIcon = (weatherCode: number, isDay: boolean, temperature: number): string => {
     if (temperature >= 35) {
         return weatherIcons.GeneralIcons.veryHot;
-    }else if (temperature <= -10) {
+    }else if (temperature <= -5) {
         return weatherIcons.GeneralIcons.veryCold;
     }else if (weatherCode === 200) {
         return isDay ? weatherIcons.DayIcons.scatteredThunder : weatherIcons.NightIcons.scatteredThunder;
