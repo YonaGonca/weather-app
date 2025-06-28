@@ -132,23 +132,29 @@ export const selectHumidityIcon = (humidity: number): string => {
     return "Invalid Value"; // Return a default value or handle the error as needed
 }
 
-export const selectWindIcon = (windSpeed: number): string => {
-    if (windSpeed <= 1.5) {
+export const selectWindIcon = (windSpeed: number, unit: string): string => {
+
+    const speedInMetersPerSecond = unit === 'imperial' ? windSpeed * 0.44704 : windSpeed;
+    
+    if (speedInMetersPerSecond <= 1.5) {
         return windIcons.zero;
-    } else if (windSpeed <= 5) {
+    } else if (speedInMetersPerSecond <= 5) {
         return windIcons.first;
-    } else if (windSpeed <= 10) {
+    } else if (speedInMetersPerSecond <= 10) {
         return windIcons.second;
-    } else if (windSpeed <= 17) {
+    } else if (speedInMetersPerSecond <= 17) {
         return windIcons.third;
-    } else if (windSpeed > 17) {
+    } else if (speedInMetersPerSecond > 17) {
         return windIcons.forth;
     }
 
     return "Invalid Value"; // Return a default value or handle the error as needed
 }
 
-export const selectWeatherIcon = (weatherCode: number, isDay: boolean, temperature: number): string => {
+export const selectWeatherIcon = (weatherCode: number, isDay: boolean, initialTemperature: number, unit: string): string => {
+
+    const temperature = unit === 'imperial' ? (initialTemperature - 32)/1.8 : initialTemperature;
+
     if (temperature >= 35) {
         return weatherIcons.GeneralIcons.veryHot;
     }else if (temperature <= -5) {

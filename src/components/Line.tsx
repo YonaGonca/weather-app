@@ -13,7 +13,7 @@ import { getGradient } from "../utils/getGradient";
 import type { ScriptableContext } from "chart.js";
 import type { ChartOptions, ChartData } from 'chart.js';
 import { getDayData } from "../utils/getDayData";
-import React from "react";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -23,7 +23,7 @@ ChartJS.register(
   Tooltip
 );
 
-export const LineGraph = React.memo(({ forecast, day, unit }: { forecast: HourlyTemp[], day: number, unit: string }) => {
+export const LineGraph = ({ forecast, day, unit }: { forecast: HourlyTemp[], day: number, unit: string }) => {
   const dates: string[] = [];
   const temps: number[] = [];
 
@@ -36,12 +36,38 @@ export const LineGraph = React.memo(({ forecast, day, unit }: { forecast: Hourly
   const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
+    plugins: {
+    tooltip: {
+    enabled: true,
+    backgroundColor: '#334155', 
+    titleColor: '#BAC5D3',      
+    bodyColor: 'white',
+    borderColor: 'white',
+    borderWidth: 2,
+    bodyFont: {
+      size: 16, 
+      weight: 600,
+    },
+    cornerRadius: 6,
+    padding: 15,
+    displayColors: false,
+    callbacks: {
+      title: () => '', // Sin título
+      label: (tooltipItem) => {
+        const value = tooltipItem.formattedValue;
+        const unitSymbol = unit === 'metric' ? '°C' : '°F';
+        return `🌡️ ${value}${unitSymbol}`;
+      },
+    },
+  },
+},
+
     scales: {
       y: {
-        min: unit == 'metric' ? -10 : 14, // valor mínimo
-        max: unit == 'metric' ? 40 : 104, // valor máximo
+        min: unit == 'metric' ? -10 : 14, 
+        max: unit == 'metric' ? 40 : 104, 
         ticks: {
-          stepSize: unit == 'metric' ? 10 : 15, // paso entre cada tick
+          stepSize: unit == 'metric' ? 10 : 15, 
           callback: function (value: string | number): string {
             return value + (unit == 'metric' ? "°C" : "°F") ; 
           },
@@ -91,11 +117,5 @@ export const LineGraph = React.memo(({ forecast, day, unit }: { forecast: Hourly
   return (
         <Line options={options} data={data} />
   );
-}, areEqual);
+};
 
-function areEqual(prevProps: any, nextProps: any) {
-  return (
-    prevProps.day === nextProps.day &&
-    JSON.stringify(prevProps.forecast) === JSON.stringify(nextProps.forecast)
-  );
-}

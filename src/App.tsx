@@ -7,7 +7,10 @@ import { useState, useEffect } from 'react'
 function App() {
   const [ city, setCity ] = useState('Lisboa')
   const [ unit, setUnit ] = useState('metric')
-  const { currentWeather, fiveDaysForecast} = useWeather(city,unit);
+  const { currentWeatherMetric, fiveDaysForecastMetric, currentWeatherImperial, fiveDaysForecastImperial } = useWeather(city);
+
+  const currentWeather = unit == 'metric' ? currentWeatherMetric : currentWeatherImperial;
+  const fiveDaysForecast = unit == 'metric' ? fiveDaysForecastMetric : fiveDaysForecastImperial;
 
   useEffect(() => {
     async function fetchCity() {
@@ -27,11 +30,11 @@ function App() {
   }, []);
 
   return (
-    <>
-    <header className='bg-nav text-white py-2 px-8 '>
+    <div className='flex flex-col min-h-screen'>
+    <header className='bg-nav text-white py-2 px-8 shadow-md'>
       <div className='w-[52rem] mx-auto flex justify-between'>
         <h1 className='text-2xl font-railway font-semibold'>YourWeather</h1>
-        <div className='text-2xl font-railway font-semibold cursor-pointer'><span className={`${ unit == 'metric' ? 'text-[#C3A637]' : 'text-white' }`} onClick={() => setUnit('metric')} >°C</span> / <span className={`${ unit == 'imperial' ? 'text-[#C3A637]' : 'text-white' }`} onClick={() => setUnit('imperial')}>°F</span></div>
+        <div className='text-2xl font-railway font-semibold cursor-pointer'><span className={`${ unit == 'metric' ? 'text-[#C3A637]' : 'text-white' } transition duration-300`} onClick={() => {setUnit('metric')}} >°C</span> / <span className={`${ unit == 'imperial' ? 'text-[#C3A637]' : 'text-white' } transition duration-300`} onClick={() => {setUnit('imperial')}}>°F</span></div>
       </div>
     </header>
     <main className={`w-[52rem] mx-auto`}>
@@ -57,28 +60,25 @@ function App() {
         )}
     </main>
 
-<footer className="bg-gray-900 text-white py-6 mt-15">
-  <div className="w-[52rem] mx-auto flex flex-col md:flex-row justify-between items-center gap-4 px-4 text-sm">
+<footer className={`bg-gray-900 text-white py-6 ${currentWeather && fiveDaysForecast ? 'mt-15' : 'mt-auto'}`}>
+  <div className="w-[52rem] mx-auto flex flex-col md:flex-row justify-between items-center gap-4 px-2 text-sm">
     <div className="text-center md:text-left">
       <p className="font-semibold text-lg">YourWeather</p>
-      <p className="text-gray-400">© {new Date().getFullYear()} Todos los derechos reservados.</p>
+      <p className="text-gray-400">© {new Date().getFullYear()} All rights reserved.</p>
     </div>
-
     <div className="flex gap-4">
-      <a href="#" className="hover:text-yellow-400 transition">
-        <i className="fab fa-x-twitter"></i>
-      </a>
-      <a href="https://github.com/YonaGonca" target='_blank' className="hover:text-yellow-400 transition">
-        <i className="fab fa-github"></i>
-      </a>
-      <a href="#" className="hover:text-yellow-400 transition">
-        <i className="fab fa-linkedin"></i>
-      </a>
+    </div>
+    <div>
+      <p className="text-gray-500 mt-1 flex gap-1 items-center">
+        Developed by <span className="text-white font-medium"><a href="https://github.com/YonaGonca" target='_blank' className="hover:text-[#C3A637] transition duration-300">Yonathan Ferreira<i className="fab fa-github ml-1 text-[15px]"></i></a></span>
+      </p>
+      <p className="text-gray-500">Powered by <a href="https://openweathermap.org/" target="_blank" className="hover:text-[#C3A637] transition text-white duration-300">OpenWeatherMap</a></p>
     </div>
   </div>
 </footer>
 
-    </>
+
+    </div>
   )
 }
 
