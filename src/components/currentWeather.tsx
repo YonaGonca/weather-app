@@ -8,7 +8,7 @@ import feelsLikeIcon from '../assets/icons/web/feels.svg'
 import { secondsToHours } from '../utils/currentTime';
 import { LineGraph } from './Line.tsx';
 
-export const CurrentWeather = ({ weather, dayForecast } : { weather:WeatherData, dayForecast: HourlyTemp[]}) => {
+export const CurrentWeather = ({ weather, dayForecast, unit} : { weather:WeatherData, dayForecast: HourlyTemp[], unit: string}) => {
     return (
       <section className="flex bg-weather p-6 rounded-lg shadow-md w-full border-2 border-nav mt-4 items-center">
         <div className='w-[50%] flex flex-wrap ml-2'>
@@ -26,9 +26,9 @@ export const CurrentWeather = ({ weather, dayForecast } : { weather:WeatherData,
         </div>
         <div className='w-[80%] h-75 mr-5' >
             {dayForecast ? (
-               <LineGraph forecast={dayForecast}/>
+               <LineGraph forecast={dayForecast} day={0} unit={unit}/>
               ) : (
-              <p>Loading forecast data...</p>
+              <div>Waiting</div>
         )}
         </div>
       </section>

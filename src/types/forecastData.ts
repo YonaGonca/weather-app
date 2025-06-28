@@ -8,6 +8,8 @@ export type DailySummary = {
   maxTemp: number;
   minTemp: number;
   maxWind: number;
+  maxHumidity: number;
+  maxFeelsLike: number;
   weather: number;
   weatherName: string;
 };
@@ -21,6 +23,8 @@ export type ForecastEntry = {
   dt_txt: string;
   main: {
     temp: number;
+    humidity: number;
+    feels_like:number;
   };
   wind: {
     speed: number;

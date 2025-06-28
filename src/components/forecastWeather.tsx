@@ -1,15 +1,17 @@
 import type { FiveDaysForecast } from "../types/forecastData" 
 import { getWeekday } from "../utils/getWeekday"
-import { selectWeatherIcon } from "../utils/selectIcon"
+import { selectWeatherIcon, selectHumidityIcon, selectWindIcon } from "../utils/selectIcon"
+import feelsLikeIcon from '../assets/icons/web/feels.svg'
 import { useState } from 'react'
+import { LineGraph } from "./Line"
 
-export const ForecastWeather = ({ fiveDaysForecast } : { fiveDaysForecast: FiveDaysForecast}) => {
+export const ForecastWeather = ({ fiveDaysForecast, unit } : { fiveDaysForecast: FiveDaysForecast, unit:string }) => {
     const [dayForecast, setDayForecast] = useState<1|2|3|4>(1)
 
     return (
         <section className="flex mt-5 w-full flex-wrap justify-between gap-2">
             <h2 className="text-2xl font-bold w-full mb-1">Forecast</h2>
-            <div className="flex-1 border-2 border-nav p-2 rounded-lg bg-weather flex flex-wrap items-center" onClick={() => setDayForecast(1)}>
+            <div className={`flex-1 border-2 px-2 py-3 rounded-lg flex items-center transition duration-300 ${ dayForecast == 1 ? 'border-border-selected bg-bg-selected scale-102' : 'border-nav bg-weather' }`} onClick={() => setDayForecast(1)}>
                 <div>
                     <h4 className="text-xl font-bold ml-2">{getWeekday(fiveDaysForecast.summary[1].date)}</h4>
                     <p className="ml-3 font-bold text-xl text-red-400">{fiveDaysForecast.summary[1].maxTemp.toFixed(0)}°C</p>
@@ -17,7 +19,7 @@ export const ForecastWeather = ({ fiveDaysForecast } : { fiveDaysForecast: FiveD
                 </div>
                 <img className="w-17 ml-auto mr-1" src={selectWeatherIcon(fiveDaysForecast.summary[1].weather,true, fiveDaysForecast.summary[1].maxTemp >= 35 ? fiveDaysForecast.summary[1].maxTemp : fiveDaysForecast.summary[1].minTemp )} alt=""/>
             </div>
-            <div className="flex-1 border-2 border-nav p-2 pr-3 py-3 rounded-lg bg-weather flex flex-wrap items-center" onClick={() => setDayForecast(2)}>
+            <div className={`flex-1 border-2 px-2 py-3 rounded-lg flex items-center transition duration-300 ${ dayForecast == 2 ? 'border-border-selected bg-bg-selected scale-102' : 'border-nav bg-weather' }`} onClick={() => setDayForecast(2)}>
                 <div>
                     <h4 className="text-xl font-bold ml-2">{getWeekday(fiveDaysForecast.summary[2].date)}</h4>
                     <p className="ml-3 font-bold text-xl text-red-400">{fiveDaysForecast.summary[2].maxTemp.toFixed(0)}°C</p>
@@ -25,7 +27,7 @@ export const ForecastWeather = ({ fiveDaysForecast } : { fiveDaysForecast: FiveD
                 </div>
                 <img className="w-17 ml-auto mr-1" src={selectWeatherIcon(fiveDaysForecast.summary[2].weather,true, fiveDaysForecast.summary[2].maxTemp >= 35 ? fiveDaysForecast.summary[2].maxTemp : fiveDaysForecast.summary[2].minTemp )} alt=""/>
             </div>
-            <div className="flex-1 border-2 border-nav p-2 pr-3 py-3 rounded-lg bg-weather flex flex-wrap items-center" onClick={() => setDayForecast(3)}>
+            <div className={`flex-1 border-2 px-2 py-3 rounded-lg flex items-center transition duration-300 ${ dayForecast == 3 ? 'border-border-selected bg-bg-selected scale-102' : 'border-nav bg-weather' }`} onClick={() => setDayForecast(3)}>
                 <div>
                     <h4 className="text-xl font-bold ml-2">{getWeekday(fiveDaysForecast.summary[3].date)}</h4>
                     <p className="ml-3 font-bold text-xl text-red-400">{fiveDaysForecast.summary[3].maxTemp.toFixed(0)}°C</p>
@@ -33,7 +35,7 @@ export const ForecastWeather = ({ fiveDaysForecast } : { fiveDaysForecast: FiveD
                 </div>
                 <img className="w-17 ml-auto mr-1" src={selectWeatherIcon(fiveDaysForecast.summary[3].weather,true, fiveDaysForecast.summary[3].maxTemp >= 35 ? fiveDaysForecast.summary[3].maxTemp : fiveDaysForecast.summary[3].minTemp )} alt=""/>
             </div>
-            <div className="flex-1 border-2 border-nav p-2 pr-3 py-3 rounded-lg bg-weather flex flex-wrap items-center" onClick={() => setDayForecast(4)}>
+            <div className={`flex-1 border-2 px-2 py-3 rounded-lg flex items-center transition duration-300 ${ dayForecast == 4 ? 'border-border-selected bg-bg-selected scale-102' : 'border-nav bg-weather' }`} onClick={() => setDayForecast(4)}>
                 <div>
                     <h4 className="text-xl font-bold ml-2">{getWeekday(fiveDaysForecast.summary[4].date)}</h4>
                     <p className="ml-3 font-bold text-xl text-red-400">{fiveDaysForecast.summary[4].maxTemp.toFixed(0)}°C</p>
@@ -41,17 +43,20 @@ export const ForecastWeather = ({ fiveDaysForecast } : { fiveDaysForecast: FiveD
                 </div>
                 <img className="w-17 ml-auto mr-1" src={selectWeatherIcon(fiveDaysForecast.summary[4].weather,true, fiveDaysForecast.summary[4].maxTemp >= 35 ? fiveDaysForecast.summary[4].maxTemp : fiveDaysForecast.summary[4].minTemp )} alt=""/>
             </div>
-            <div className="flex w-full bg-weather p-6 rounded-lg shadow-md border-2 border-nav mt-4">
+            <div className="flex w-full bg-weather p-6 rounded-lg shadow-md border-2 border-nav">
                 <div className="w-[50%] flex flex-wrap ml-2">
                     <h2 className="text-2xl font-bold mb-0 w-full">{getWeekday(fiveDaysForecast.summary[dayForecast].date)}</h2>
                     <p className='w-full text-xl opacity-70'>{fiveDaysForecast.summary[dayForecast].weatherName}</p>
-                    <div className='flex items-center mb-3 mt-3'>
+                    <div className='flex items-center mb-5 mt-3'>
                         <img className="w-25 ml-4" src={selectWeatherIcon(fiveDaysForecast.summary[dayForecast].weather,true,fiveDaysForecast.summary[1].maxTemp >= 35 ? fiveDaysForecast.summary[1].maxTemp : fiveDaysForecast.summary[1].minTemp)} alt=""/>
                         <p className='text-5xl ml-3 font-bold'>{fiveDaysForecast.summary[dayForecast].maxTemp.toFixed(0)}°C</p>
                     </div>
+                    <p className='flex w-full items-center mb-0.5 ml-2'><img src={selectHumidityIcon(fiveDaysForecast.summary[dayForecast].maxHumidity)} alt="" className='w-8 mr-2'/>Humidity: {fiveDaysForecast.summary[dayForecast].maxHumidity}%</p>
+                    <p className='flex w-full items-center mb-0.5 ml-2'><img src={selectWindIcon(fiveDaysForecast.summary[dayForecast].maxWind)} alt="" className='w-8 mr-2'/>Wind Speed: {fiveDaysForecast.summary[dayForecast].maxWind} m/s</p>
+                    <p className='flex w-full items-center mb-0.5 ml-2'><img src={feelsLikeIcon} alt="" className='h-8 w-8 mr-2'/>Feels like: {fiveDaysForecast.summary[dayForecast].maxFeelsLike.toFixed(0)}°C </p>
                 </div>
-                <div className="w-[50%]">
-                    Grafico
+                <div className="w-[75%] h-65 mr-5 mt-5">
+                    <LineGraph forecast={fiveDaysForecast.hourlyTemps} day={dayForecast} unit={unit}/>
                 </div>
             </div>
         </section>

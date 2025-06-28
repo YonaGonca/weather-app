@@ -12,7 +12,8 @@ import type { HourlyTemp } from "../types/forecastData";
 import { getGradient } from "../utils/getGradient";
 import type { ScriptableContext } from "chart.js";
 import type { ChartOptions, ChartData } from 'chart.js';
-
+import { getDayData } from "../utils/getDayData";
+import React from "react";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -22,11 +23,12 @@ ChartJS.register(
   Tooltip
 );
 
-export const LineGraph = ({ forecast }: { forecast: HourlyTemp[] }) => {
+export const LineGraph = React.memo(({ forecast, day, unit }: { forecast: HourlyTemp[], day: number, unit: string }) => {
   const dates: string[] = [];
   const temps: number[] = [];
 
-  forecast.slice(0, 8).forEach((entry: HourlyTemp) => {
+  forecast = getDayData(forecast, day)
+  forecast.forEach((entry: HourlyTemp) => {
     dates.push(entry.time.slice(11, 16));
     temps.push(entry.temp);
   });
@@ -36,12 +38,12 @@ export const LineGraph = ({ forecast }: { forecast: HourlyTemp[] }) => {
     maintainAspectRatio: false,
     scales: {
       y: {
-        min: -10, // valor mínimo
-        max: 40, // valor máximo
+        min: unit == 'metric' ? -10 : 14, // valor mínimo
+        max: unit == 'metric' ? 40 : 104, // valor máximo
         ticks: {
-          stepSize: 10, // paso entre cada tick
+          stepSize: unit == 'metric' ? 10 : 15, // paso entre cada tick
           callback: function (value: string | number): string {
-            return value + "°C"; 
+            return value + (unit == 'metric' ? "°C" : "°F") ; 
           },
           color: "white",
         },
@@ -89,4 +91,11 @@ export const LineGraph = ({ forecast }: { forecast: HourlyTemp[] }) => {
   return (
         <Line options={options} data={data} />
   );
-};
+}, areEqual);
+
+function areEqual(prevProps: any, nextProps: any) {
+  return (
+    prevProps.day === nextProps.day &&
+    JSON.stringify(prevProps.forecast) === JSON.stringify(nextProps.forecast)
+  );
+}
